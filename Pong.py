@@ -1,6 +1,17 @@
 import pygame
 import sys
 import textwrap
+import time
+
+time.sleep(3)
+
+try:
+    # Close the splash screen.
+    import pyi_splash
+    pyi_splash.close()
+except ImportError:
+    # Otherwise do nothing.
+    pass
 
 # Initialize Pygame
 pygame.init()
