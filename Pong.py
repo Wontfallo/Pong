@@ -1,3 +1,8 @@
+#simple game of Pong. 
+#By: Gerald Jackson  in Dec of 2013
+#Left Player uses 'W' & 'S' keys 
+#Right Player users 'Up Arrow' & 'Down Arrow' keys
+
 import pygame
 import sys
 import textwrap
@@ -30,17 +35,21 @@ pygame.display.set_caption("Pong")
 # Set up the colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
 
 # Set up the font
 FONT = pygame.font.SysFont('comicsans', 50)
 
 # Set up the classes
 class Paddle:
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, color):
         self.x = self.original_x = x
         self.y = self.original_y = y
         self.width = width
         self.height = height
+        self.color = color
 
     def reset(self):
         self.x = self.original_x
@@ -69,7 +78,7 @@ def draw(win, paddles, ball, left_score, right_score):
     win.blit(right_score_text, (WIDTH * (3/4) - right_score_text.get_width()//2, 20))
 
     for paddle in paddles:
-        pygame.draw.rect(win, WHITE, pygame.Rect(paddle.x, paddle.y, paddle.width, paddle.height))
+       pygame.draw.rect(win, paddle.color, pygame.Rect(paddle.x, paddle.y, paddle.width, paddle.height))
 
     pygame.draw.circle(win, WHITE, (ball.x, ball.y), ball.radius)
 
@@ -90,8 +99,8 @@ def main():
     run = True
     clock = pygame.time.Clock()
 
-    left_paddle = Paddle(10, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT)
-    right_paddle = Paddle(WIDTH - 10 - PADDLE_WIDTH, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT)
+    left_paddle = Paddle(10, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT, RED)
+    right_paddle = Paddle(WIDTH - 10 - PADDLE_WIDTH, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT, BLUE)
     ball = Ball(WIDTH//2, HEIGHT//2, BALL_RADIUS, WHITE, 5, 5)
 
     left_score = 0
@@ -103,15 +112,6 @@ def main():
         clock.tick(FPS)
         draw(WIN, [left_paddle, right_paddle], ball, left_score, right_score)
 
-        #if game_over:
-            #text_lines = textwrap.wrap(f"{winner} wins! Press Q to quit or Space to play again", width=75)  # Adjust the width as needed
-            #for i, line in enumerate(text_lines):
-                #text = FONT.render(line, 1, WHITE)
-        # Render the text at the appropriate position
-        # You might need to adjust the y position for each line
-        # For example, you could add 20 pixels to the y position for each new line
-        #screen.blit(text, (x, y + 20 * i))  
-
         if game_over:
             FONT_SIZE = 30  # Adjust this value to change the font size
             text = FONT.render(f"{winner} wins! Press Q to quit or Space to play again", True, WHITE)
@@ -121,12 +121,7 @@ def main():
             y_coordinate = HEIGHT//2 - text.get_height()//2 - 50  # Subtract 50 to move the text up           
 
             WIN.blit(text, (WIDTH//2 - text.get_width()//2, y_coordinate))
-           # WIN.blit(text, (WIDTH//2 - text.get_width()//2, HEIGHT//2 - text.get_height()//2))
             pygame.display.update()
-
-            #text = FONT.render(f"{winner} wins! Press Q to quit or Space to play again", 1, WHITE)
-            #WIN.blit(text, (WIDTH//2 - text.get_width()//2, HEIGHT//2 - text.get_height()//2))
-            #pygame.display.update()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -199,31 +194,5 @@ def main():
     pygame.quit()
     sys.exit()
 
-'''###
-            won = False
-            if left_score >= 5:
-                won = True
-                win_text = "Left Player Won!"
-            elif right_score >= 5:
-                won = True
-                win_text = "Right Player Won!"
-                
-            if won:
-                text = FONT.render(win_text, 1, WHITE)
-                WIN.blit(text, (WIDTH//2 - text.get_width()//2, HEIGHT//2 - text.get_height()//2))
-                pygame.display.update()
-                pygame.time.delay(5000)
-                ball.reset()
-                left_paddle.reset()
-                right_paddle.reset()
-                left_score = 0
-                right_score = 0
-
-    pygame.quit()
-    sys.exit()
-
-'''###
-
 if __name__ == '__main__':
     main()
-
